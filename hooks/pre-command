@@ -19,7 +19,6 @@ then
   docker_file="${docker_file_dir}/Dockerfile"
   echo "$BUILDKITE_PLUGIN_DOCKER_ECR_CACHE_DOCKERFILE_INLINE" > "$docker_file"
   context_dir="."
-  cat "$docker_file"
 else
   docker_file="${BUILDKITE_PLUGIN_DOCKER_ECR_CACHE_DOCKERFILE:-"Dockerfile"}"
   context_dir="$(dirname "${docker_file}")"
@@ -71,7 +70,9 @@ else
       done
     fi
 
-    echo "Inside $(pwd), running \`docker ${image_build_args[*]} ${context}\`"
+    cat "$docker_file"
+
+    echo "Inside $(pwd), running \`DOCKER_BUILDKIT=1 docker ${image_build_args[*]} ${context}\`"
     # We can't quote BUILDKITE_PLUGIN_DOCKER_ECR_CACHE_ADDITIONAL_BUILD_ARGS, because it's passed here as a string instead of a bash array.
     # shellcheck disable=SC2086
     DOCKER_BUILDKIT=1 docker "${image_build_args[@]}" ${BUILDKITE_PLUGIN_DOCKER_ECR_CACHE_ADDITIONAL_BUILD_ARGS:-} "${context}" ||
