@@ -19,6 +19,7 @@ then
   docker_file="${docker_file_dir}/Dockerfile"
   echo "$BUILDKITE_PLUGIN_DOCKER_ECR_CACHE_DOCKERFILE_INLINE" > "$docker_file"
   context_dir="."
+  cat "$docker_file"
 else
   docker_file="${BUILDKITE_PLUGIN_DOCKER_ECR_CACHE_DOCKERFILE:-"Dockerfile"}"
   context_dir="$(dirname "${docker_file}")"
